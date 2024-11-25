@@ -1,0 +1,32 @@
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\appsettings.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\SOA_CA2 E-Commerce.exe
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\SOA_CA2 E-Commerce.deps.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\SOA_CA2 E-Commerce.runtimeconfig.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\SOA_CA2 E-Commerce.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\SOA_CA2 E-Commerce.pdb
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.csproj.AssemblyReference.cache
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.AssemblyInfoInputs.cache
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.AssemblyInfo.cs
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.csproj.CoreCompileInputs.cache
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets\msbuild.SOA_CA2 E-Commerce.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets\msbuild.build.SOA_CA2 E-Commerce.props
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.SOA_CA2 E-Commerce.props
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.SOA_CA2 E-Commerce.props
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\scopedcss\bundle\SOA_CA2 E-Commerce.styles.css
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 .5F3B14FC.Up2Date
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\refint\SOA_CA2 E-Commerce.dll
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.pdb
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\SOA_CA2 E-Commerce.genruntimeconfig.cache
+C:\Users\kosys\source\repos\SOA_CA2 E-Commerce\obj\Debug\net8.0\ref\SOA_CA2 E-Commerce.dll
