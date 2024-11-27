@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\SOA_CA2 E-Commerce\\SOA_CA2 E-Commerce.csproj": {}
+    "C:\\SOA_CA2 E-Commerce\\ECommerceProject\\ECommerceProject.csproj": {}
   },
   "projects": {
-    "C:\\SOA_CA2 E-Commerce\\SOA_CA2 E-Commerce.csproj": {
+    "C:\\SOA_CA2 E-Commerce\\ECommerceProject\\ECommerceProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\SOA_CA2 E-Commerce\\SOA_CA2 E-Commerce.csproj",
-        "projectName": "SOA_CA2 E-Commerce",
-        "projectPath": "C:\\SOA_CA2 E-Commerce\\SOA_CA2 E-Commerce.csproj",
+        "projectUniqueName": "C:\\SOA_CA2 E-Commerce\\ECommerceProject\\ECommerceProject.csproj",
+        "projectName": "ECommerceProject",
+        "projectPath": "C:\\SOA_CA2 E-Commerce\\ECommerceProject\\ECommerceProject.csproj",
         "packagesPath": "C:\\Users\\kosys\\.nuget\\packages\\",
-        "outputPath": "C:\\SOA_CA2 E-Commerce\\obj\\",
+        "outputPath": "C:\\SOA_CA2 E-Commerce\\ECommerceProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kosys\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,31 +45,13 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+            "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[12.0.1, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[9.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[9.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.0, )"
-            },
-            "Microsoft.IdentityModel.Tokens": {
-              "target": "Package",
-              "version": "[8.2.1, )"
+              "version": "[8.0.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[7.1.0, )"
+              "version": "[6.4.0, )"
             }
           },
           "imports": [
