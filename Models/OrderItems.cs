@@ -2,15 +2,15 @@
 
 namespace SOA_CA2_E_Commerce.Models
 {
-    public class OrderItem
+    public class OrderItems
     {
-        public int ItemId { get; set; }
+        public int Item_Id { get; set; }
 
         [Required]
-        public int OrderId { get; set; }
+        public int Order_Id { get; set; }
 
         [Required]
-        public int ProductId { get; set; }
+        public int Product_Id { get; set; }
 
         [Required]
         public int Quantity { get; set; }
@@ -18,7 +18,7 @@ namespace SOA_CA2_E_Commerce.Models
         [Required]
         public decimal Price { get; set; }
 
-        public Order Order { get; set; }
+        public Orders Order { get; set; }
 
         public Product Product { get; set; }
     }
