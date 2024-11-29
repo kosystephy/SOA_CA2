@@ -12,7 +12,7 @@ using SOA_CA2_E_Commerce.Data;
 namespace SOA_CA2_E_Commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241129181811_InitialCreate")]
+    [Migration("20241129191955_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,34 @@ namespace SOA_CA2_E_Commerce.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Auths", b =>
+                {
+                    b.Property<int>("Auth_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Auth_Id"));
+
+                    b.Property<string>("Api_Key")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Customer_Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Auth_Id");
+
+                    b.HasIndex("Customer_Id");
+
+                    b.ToTable("Auths");
+                });
 
             modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Categories", b =>
                 {
@@ -147,7 +175,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Product", b =>
+            modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Products", b =>
                 {
                     b.Property<int>("Product_Id")
                         .ValueGeneratedOnAdd()
@@ -193,6 +221,17 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Auths", b =>
+                {
+                    b.HasOne("SOA_CA2_E_Commerce.Models.Customers", "Customer")
+                        .WithMany("Auths")
+                        .HasForeignKey("Customer_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("SOA_CA2_E_Commerce.Models.OrderItems", b =>
                 {
                     b.HasOne("SOA_CA2_E_Commerce.Models.Orders", "Order")
@@ -201,7 +240,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SOA_CA2_E_Commerce.Models.Product", "Product")
+                    b.HasOne("SOA_CA2_E_Commerce.Models.Products", "Product")
                         .WithMany()
                         .HasForeignKey("Product_Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -223,7 +262,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Product", b =>
+            modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Products", b =>
                 {
                     b.HasOne("SOA_CA2_E_Commerce.Models.Categories", "Category")
                         .WithMany("Products")
@@ -241,6 +280,8 @@ namespace SOA_CA2_E_Commerce.Migrations
 
             modelBuilder.Entity("SOA_CA2_E_Commerce.Models.Customers", b =>
                 {
+                    b.Navigation("Auths");
+
                     b.Navigation("Orders");
                 });
 

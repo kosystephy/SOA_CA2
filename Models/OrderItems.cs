@@ -23,6 +23,6 @@ namespace SOA_CA2_E_Commerce.Models
 
         public Orders Order { get; set; }
 
-        public Product Product { get; set; }
+        public Products Product { get; set; }
     }
 }

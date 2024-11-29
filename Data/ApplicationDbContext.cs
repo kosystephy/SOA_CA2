@@ -11,8 +11,9 @@ namespace SOA_CA2_E_Commerce.Data
         public DbSet<Customers> Customers { get; set; }
         public DbSet<Orders> Orders { get; set; }
         public DbSet<OrderItems> OrderItems { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Products> Products { get; set; }
         public DbSet<Categories> Categories { get; set; }
+        public DbSet<Auths> Auths { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,8 +26,10 @@ namespace SOA_CA2_E_Commerce.Data
                 .HasKey(o => o.Order_Id);
             modelBuilder.Entity<OrderItems>()
                 .HasKey(oi => oi.Item_Id);
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<Products>()
                 .HasKey(p => p.Product_Id);
+            modelBuilder.Entity<Auths>()
+                .HasKey(a => a.Auth_Id);
 
             // Auto-Increment for Primary Keys
             modelBuilder.Entity<Categories>()
@@ -41,8 +44,11 @@ namespace SOA_CA2_E_Commerce.Data
             modelBuilder.Entity<OrderItems>()
                 .Property(oi => oi.Item_Id)
                 .ValueGeneratedOnAdd();
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<Products>()
                 .Property(p => p.Product_Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Auths>()
+                .Property(a => a.Auth_Id)
                 .ValueGeneratedOnAdd();
 
             // Required Fields
@@ -52,11 +58,14 @@ namespace SOA_CA2_E_Commerce.Data
             modelBuilder.Entity<Customers>()
                 .Property(c => c.Email)
                 .IsRequired();
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<Products>()
                 .Property(p => p.Product_Name)
                 .IsRequired();
             modelBuilder.Entity<Orders>()
                 .Property(o => o.Status)
+                .IsRequired();
+          modelBuilder.Entity<Auths>()
+                .Property(a => a.Api_Key)
                 .IsRequired();
 
             // Relationships
@@ -78,11 +87,18 @@ namespace SOA_CA2_E_Commerce.Data
                 .HasForeignKey(oi => oi.Product_Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<Products>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.Category_Id)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Auths>() // Relationship between Auth and Customers
+                .HasOne(a => a.Customer)
+                .WithMany(c => c.Auths)
+                .HasForeignKey(a => a.Customer_Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

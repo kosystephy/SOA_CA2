@@ -30,7 +30,7 @@ namespace SOA_CA2_E_Commerce.Data
             {
                 Console.WriteLine("Seeding Products...");
                 context.Products.AddRange(
-                    new Product
+                    new Products
                     {
                         Product_Name = "Smartphone",
                         Brand = "Samsung",
@@ -42,7 +42,7 @@ namespace SOA_CA2_E_Commerce.Data
                         Price = 1200.50M,
                         Category_Id = context.Categories.First(c => c.CategoryName == "Electronics").Category_Id
                     },
-                    new Product
+                    new Products
                     {
                         Product_Name = "T-Shirt",
                         Brand = "Nike",
@@ -132,6 +132,28 @@ namespace SOA_CA2_E_Commerce.Data
                         Product_Id = context.Products.First(p => p.Product_Name == "T-Shirt").Product_Id,
                         Quantity = 3,
                         Price = 150.00M
+                    }
+                );
+                context.SaveChanges();
+            }
+
+            if (!context.Auths.Any())
+            {
+                Console.WriteLine("Seeding Auths...");
+                context.Auths.AddRange(
+                    new Auths
+                    {
+                        Customer_Id = context.Customers.First(c => c.Email == "john.doe@example.com").Customer_Id,
+                        Api_Key = Guid.NewGuid().ToString(), // Generate unique API key
+                        CreatedAt = DateTime.UtcNow,
+                        Expiration = DateTime.UtcNow.AddMonths(6) // API key expires in 6 months
+                    },
+                    new Auths
+                    {
+                        Customer_Id = context.Customers.First(c => c.Email == "jane.smith@example.com").Customer_Id,
+                        Api_Key = Guid.NewGuid().ToString(), // Generate unique API key
+                        CreatedAt = DateTime.UtcNow,
+                        Expiration = DateTime.UtcNow.AddMonths(6)
                     }
                 );
                 context.SaveChanges();
