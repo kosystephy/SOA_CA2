@@ -91,6 +91,30 @@ namespace SOA_CA2_E_Commerce.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Auths",
+                columns: table => new
+                {
+                    Auth_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Customer_Id = table.Column<int>(type: "int", nullable: false),
+                    Api_Key = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Auths", x => x.Auth_Id);
+                    table.ForeignKey(
+                        name: "FK_Auths_Customers_Customer_Id",
+                        column: x => x.Customer_Id,
+                        principalTable: "Customers",
+                        principalColumn: "Customer_Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -144,6 +168,11 @@ namespace SOA_CA2_E_Commerce.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Auths_Customer_Id",
+                table: "Auths",
+                column: "Customer_Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_Order_Id",
                 table: "OrderItems",
                 column: "Order_Id");
@@ -167,6 +196,9 @@ namespace SOA_CA2_E_Commerce.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Auths");
+
             migrationBuilder.DropTable(
                 name: "OrderItems");
 

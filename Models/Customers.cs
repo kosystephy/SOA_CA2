@@ -15,6 +15,8 @@
 
         // Navigation Property to Orders
         public ICollection<Orders> Orders { get; set; } = new List<Orders>();
+
+        public ICollection<Auths> Auths { get; set; } = new List<Auths>();
     }
 }
  
