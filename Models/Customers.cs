@@ -8,7 +8,7 @@
         public string Email { get; set; }  // Unique field for login
         public string PasswordHash { get; set; }  // For secure authentication
         public string Salt { get; set; }
-        public string Role { get; set; }
+        public Enums.UserRole Role { get; set; } = Enums.UserRole.Customer; // Enum for Role
         public string Address { get; set; }
         public DateTime CreatedAt { get; set; }  // Timestamp
         public DateTime UpdatedAt { get; set; }  // Timestamp
@@ -17,3 +17,4 @@
         public ICollection<Orders> Orders { get; set; } = new List<Orders>();
     }
 }
+ 

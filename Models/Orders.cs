@@ -16,9 +16,14 @@ namespace SOA_CA2_E_Commerce.Models
         public decimal Total_Amount { get; set; }
 
         [Required]
-        public string Status { get; set; } // e.g., "Pending", "Completed", "Cancelled"
+        public Enums.OrderStatus Status { get; set; } 
 
-        public Customers Customer { get; set; }
+        [Required]
+        public Enums.PaymentMethod Payment_Method { get; set; }
+
+    public Customers Customer { get; set; }
         public ICollection<OrderItems> OrderItems { get; set; } = new List<OrderItems>();
     }
 }
+
+ 

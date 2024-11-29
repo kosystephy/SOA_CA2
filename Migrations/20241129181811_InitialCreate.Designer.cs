@@ -12,7 +12,7 @@ using SOA_CA2_E_Commerce.Data;
 namespace SOA_CA2_E_Commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241129171810_InitialCreate")]
+    [Migration("20241129181811_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -73,9 +73,8 @@ namespace SOA_CA2_E_Commerce.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -132,9 +131,11 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.Property<DateTime>("Order_Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Payment_Method")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Total_Amount")
                         .HasColumnType("decimal(65,30)");
@@ -171,6 +172,9 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Product_Name")
                         .IsRequired()
