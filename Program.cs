@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using SOA_CA2_E_Commerce.Data;
+using SOA_CA2_E_Commerce.Interface;
+using SOA_CA2_E_Commerce.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
 
 // Add DbContext with MySQL connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -14,6 +17,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IProduct, ProductService>();
+// Register IOrder and OrderService in the DI container
+builder.Services.AddScoped<IOrder, OrderService>();
 
 var app = builder.Build();
 
