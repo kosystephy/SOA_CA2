@@ -1,6 +1,6 @@
 .vs/
 bin/
-obj/
+/obj/
 /obj/Debug/net8.0/SOA_CA2 E-Commerce.AssemblyInfo.cs
 /obj/Debug/net8.0/SOA_CA2 E-Commerce.AssemblyInfoInputs.cache
 /obj/Debug/net8.0/SOA_CA2 E-Commerce.GeneratedMSBuildEditorConfig.editorconfig
