@@ -12,7 +12,7 @@ using SOA_CA2_E_Commerce.Data;
 namespace SOA_CA2_E_Commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241129191955_InitialCreate")]
+    [Migration("20241129192439_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
