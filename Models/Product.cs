@@ -10,7 +10,7 @@ namespace SOA_CA2_E_Commerce.Models
         public int Category_Id { get; set; }
         public string Product_Name { get; set; }
             public string Brand { get; set; }
-            public string Gender { get; set; }
+            public GenderType Gender { get; set; }
         public int Stock { get; set; }
         public int Year { get; set; }
             public string Description { get; set; }
@@ -20,3 +20,6 @@ namespace SOA_CA2_E_Commerce.Models
 
     
 }
+
+// Enums
+public enum GenderType { Male, Female, Unisex }
