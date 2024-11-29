@@ -12,7 +12,7 @@ using SOA_CA2_E_Commerce.Data;
 namespace SOA_CA2_E_Commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241128005410_InitialCreate")]
+    [Migration("20241129171810_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -165,9 +165,8 @@ namespace SOA_CA2_E_Commerce.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .IsRequired()
