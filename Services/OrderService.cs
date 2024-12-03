@@ -20,7 +20,7 @@ namespace SOA_CA2_E_Commerce.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<OrdersDTO>> GetAllOrdersAsync()
+        public async Task<IEnumerable<OrdersDTO>> GetAllOrders()
         {
             return await _context.Orders
                 .Include(o => o.Customer)
@@ -36,7 +36,7 @@ namespace SOA_CA2_E_Commerce.Services
                 }).ToListAsync();
         }
 
-        public async Task<OrdersDTO> GetOrderByIdAsync(int id)
+        public async Task<OrdersDTO> GetOrderById(int id)
         {
             var order = await _context.Orders
                 .Include(o => o.Customer)
@@ -56,7 +56,7 @@ namespace SOA_CA2_E_Commerce.Services
             };
         }
 
-        public async Task CreateOrderAsync(OrdersDTO orderDTO)
+        public async Task CreateOrder(OrdersDTO orderDTO)
         {
             // Convert strings to enums
             if (!Enum.TryParse<OrderStatus>(orderDTO.Status, true, out var parsedStatus))
@@ -82,7 +82,7 @@ namespace SOA_CA2_E_Commerce.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateOrderAsync(int id, OrdersDTO orderDTO)
+        public async Task UpdateOrder(int id, OrdersDTO orderDTO)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Order_Id == id);
             if (order == null) return;
@@ -108,7 +108,7 @@ namespace SOA_CA2_E_Commerce.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteOrderAsync(int id)
+        public async Task DeleteOrder(int id)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Order_Id == id);
             if (order == null) return;
@@ -117,7 +117,7 @@ namespace SOA_CA2_E_Commerce.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<OrdersDTO>> GetOrdersByStatusAsync(string status)
+        public async Task<IEnumerable<OrdersDTO>> GetOrdersByStatus(string status)
         {
             // Convert string to enum
             if (!Enum.TryParse<OrderStatus>(status, true, out var parsedStatus))

@@ -18,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProduct, ProductService>();
+builder.Services.AddScoped<ICustomer, CustomerService>();
+builder.Services.AddScoped<IOrder, OrderService>();
 // Register IOrder and OrderService in the DI container
 builder.Services.AddScoped<IOrder, OrderService>();
 
