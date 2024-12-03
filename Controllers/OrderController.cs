@@ -21,7 +21,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
-            var orders = await _orderService.GetAllOrdersAsync();
+            var orders = await _orderService.GetAllOrders();
             return Ok(orders);
         }
 
@@ -29,7 +29,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
-            var order = await _orderService.GetOrderByIdAsync(id);
+            var order = await _orderService.GetOrderById(id);
             if (order == null) return NotFound($"Order with ID {id} not found.");
             return Ok(order);
         }
@@ -40,7 +40,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         {
             try
             {
-                await _orderService.CreateOrderAsync(orderDTO);
+                await _orderService.CreateOrder(orderDTO);
                 return CreatedAtAction(nameof(GetOrderById), new { id = orderDTO.Order_Id }, orderDTO);
             }
             catch (ArgumentException ex)
@@ -55,7 +55,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         {
             try
             {
-                await _orderService.UpdateOrderAsync(id, orderDTO);
+                await _orderService.UpdateOrder(id, orderDTO);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -68,7 +68,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
-            await _orderService.DeleteOrderAsync(id);
+            await _orderService.DeleteOrder(id);
             return NoContent();
         }
 
@@ -78,7 +78,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         {
             try
             {
-                var orders = await _orderService.GetOrdersByStatusAsync(status);
+                var orders = await _orderService.GetOrdersByStatus(status);
                 return Ok(orders);
             }
             catch (ArgumentException ex)
