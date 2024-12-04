@@ -1,13 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SOA_CA2_E_Commerce.Data;
+﻿using SOA_CA2_E_Commerce.Data;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Enums;
 using SOA_CA2_E_Commerce.Interface;
+using Microsoft.EntityFrameworkCore;
 using SOA_CA2_E_Commerce.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SOA_CA2_E_Commerce.Services
 {
@@ -20,121 +15,83 @@ namespace SOA_CA2_E_Commerce.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<OrdersDTO>> GetAllOrders()
+        public async Task<IEnumerable<OrderDTO>> GetAllOrders()
         {
             return await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.OrderItems)
-                .Select(o => new OrdersDTO
+                .Select(o => new OrderDTO
                 {
                     Order_Id = o.Order_Id,
-                    Customer_Id = o.Customer_Id,
-                    Order_Date = o.Order_Date,
+                    User_Id = o.User_Id,
+                    CreatedAt = o.CreatedAt,
                     Total_Amount = o.Total_Amount,
-                    Status = o.Status.ToString(), // Convert enum to string
-                    Payment_Method = o.Payment_Method.ToString() // Convert enum to string
+                    Status = o.Status
                 }).ToListAsync();
         }
 
-        public async Task<OrdersDTO> GetOrderById(int id)
+        public async Task<OrderDTO> GetOrderById(int id)
         {
-            var order = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o => o.Order_Id == id);
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) throw new KeyNotFoundException("Order not found");
 
-            if (order == null) return null;
-
-            return new OrdersDTO
+            return new OrderDTO
             {
                 Order_Id = order.Order_Id,
-                Customer_Id = order.Customer_Id,
-                Order_Date = order.Order_Date,
+                User_Id = order.User_Id,
+                CreatedAt = order.CreatedAt,
                 Total_Amount = order.Total_Amount,
-                Status = order.Status.ToString(), // Convert enum to string
-                Payment_Method = order.Payment_Method.ToString() // Convert enum to string
+                Status = order.Status
             };
         }
 
-        public async Task CreateOrder(OrdersDTO orderDTO)
+        public async Task<OrderDTO> CreateOrder(OrderDTO orderDTO)
         {
-            // Convert strings to enums
-            if (!Enum.TryParse<OrderStatus>(orderDTO.Status, true, out var parsedStatus))
+            var order = new Order
             {
-                throw new ArgumentException($"Invalid order status value: {orderDTO.Status}");
-            }
-
-            if (!Enum.TryParse<PaymentMethod>(orderDTO.Payment_Method, true, out var parsedPaymentMethod))
-            {
-                throw new ArgumentException($"Invalid payment method value: {orderDTO.Payment_Method}");
-            }
-
-            var order = new Orders
-            {
-                Customer_Id = orderDTO.Customer_Id,
-                Order_Date = orderDTO.Order_Date,
+                User_Id = orderDTO.User_Id,
+                CreatedAt = DateTime.UtcNow,
                 Total_Amount = orderDTO.Total_Amount,
-                Status = parsedStatus,
-                Payment_Method = parsedPaymentMethod
+                Status = orderDTO.Status
             };
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
+
+            orderDTO.Order_Id = order.Order_Id;
+            return orderDTO;
         }
 
-        public async Task UpdateOrder(int id, OrdersDTO orderDTO)
+        public async Task<OrderDTO> UpdateOrder(int id, OrderDTO orderDTO)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Order_Id == id);
-            if (order == null) return;
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) throw new KeyNotFoundException("Order not found");
 
-            // Convert strings to enums
-            if (!Enum.TryParse<OrderStatus>(orderDTO.Status, true, out var parsedStatus))
-            {
-                throw new ArgumentException($"Invalid order status value: {orderDTO.Status}");
-            }
-
-            if (!Enum.TryParse<PaymentMethod>(orderDTO.Payment_Method, true, out var parsedPaymentMethod))
-            {
-                throw new ArgumentException($"Invalid payment method value: {orderDTO.Payment_Method}");
-            }
-
-            order.Customer_Id = orderDTO.Customer_Id;
-            order.Order_Date = orderDTO.Order_Date;
-            order.Total_Amount = orderDTO.Total_Amount;
-            order.Status = parsedStatus;
-            order.Payment_Method = parsedPaymentMethod;
-
+            order.Status = orderDTO.Status;
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
+
+            return orderDTO;
         }
 
         public async Task DeleteOrder(int id)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Order_Id == id);
-            if (order == null) return;
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) throw new KeyNotFoundException("Order not found");
 
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<OrdersDTO>> GetOrdersByStatus(string status)
+        public async Task<IEnumerable<OrderDTO>> GetOrdersByUserId(int userId)
         {
-            // Convert string to enum
-            if (!Enum.TryParse<OrderStatus>(status, true, out var parsedStatus))
-            {
-                throw new ArgumentException($"Invalid order status value: {status}");
-            }
-
             return await _context.Orders
-                .Where(o => o.Status == parsedStatus)
-                .Select(o => new OrdersDTO
+                .Where(o => o.User_Id == userId)
+                .Select(o => new OrderDTO
                 {
                     Order_Id = o.Order_Id,
-                    Customer_Id = o.Customer_Id,
-                    Order_Date = o.Order_Date,
+                    User_Id = o.User_Id,
+                    CreatedAt = o.CreatedAt,
                     Total_Amount = o.Total_Amount,
-                    Status = o.Status.ToString(), // Convert enum to string
-                    Payment_Method = o.Payment_Method.ToString() // Convert enum to string
+                    Status = o.Status
                 }).ToListAsync();
         }
     }

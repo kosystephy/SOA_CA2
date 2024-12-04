@@ -6,22 +6,13 @@ namespace SOA_CA2_E_Commerce.Interface
 {
     public interface IProduct
     {
-        //Basic CRUD operations
-        Task<IEnumerable<ProductsDTO>> GetAllProducts();
-        Task<ProductsDTO> GetProductById(int id);
-        Task<ProductsDTO> CreateProduct(ProductsDTO product);
-
-        Task<ProductsDTO> UpdateProduct(int id, ProductsDTO product);
-
+        Task<IEnumerable<ProductDTO>> GetAllProducts();
+        Task<ProductDTO> GetProductById(int id);
+        Task<ProductDTO> CreateProduct(ProductDTO productDTO);
+        Task<ProductDTO> UpdateProduct(int id, ProductDTO productDTO);
         Task DeleteProduct(int id);
-
-        //Custom operations
-
-        Task<IEnumerable<ProductsDTO>> SearchProductsByName(string Product_Name);
-
-        Task<IEnumerable<ProductsDTO>> GetProductsByCategory(int Category_Id);
-
-        Task<bool> IsProductInStock(int Category_Id);
+        Task<IEnumerable<ProductDTO>> GetProductsByCategory(int categoryId);
+    
 
 
     }

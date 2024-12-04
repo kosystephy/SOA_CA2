@@ -7,13 +7,13 @@ namespace SOA_CA2_E_Commerce.Interface
     public interface IOrder
     {
         // CRUD Operations
-        Task<IEnumerable<OrdersDTO>> GetAllOrders();
-        Task<OrdersDTO> GetOrderById(int id);
-        Task CreateOrder(OrdersDTO orderDTO);
-        Task UpdateOrder(int id, OrdersDTO orderDTO);
+        Task<IEnumerable<OrderDTO>> GetAllOrders();
+        Task<OrderDTO> GetOrderById(int id);
+        Task<OrderDTO> CreateOrder(OrderDTO orderDTO);
+        Task<OrderDTO> UpdateOrder(int id, OrderDTO orderDTO);
         Task DeleteOrder(int id);
+        Task<IEnumerable<OrderDTO>> GetOrdersByUserId(int userId);
 
-        // Custom Operation
-        Task<IEnumerable<OrdersDTO>> GetOrdersByStatus(string status);
+
     }
 }

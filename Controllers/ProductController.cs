@@ -37,18 +37,21 @@ namespace SOA_CA2_E_Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductsDTO productDto)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
         {
-            var createdProduct = await _productService.CreateProduct(productDto);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var createdProduct = await _productService.CreateProduct(productDTO);
             return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.Product_Id }, createdProduct);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductsDTO productDto)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDTO productDTO)
         {
             try
             {
-                var updatedProduct = await _productService.UpdateProduct(id, productDto);
+                var updatedProduct = await _productService.UpdateProduct(id, productDTO);
                 return Ok(updatedProduct);
             }
             catch (KeyNotFoundException ex)
@@ -71,32 +74,11 @@ namespace SOA_CA2_E_Commerce.Controllers
             }
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchProductsByName([FromQuery] string productName)
-        {
-            var products = await _productService.SearchProductsByName(productName);
-            return Ok(products);
-        }
-
         [HttpGet("category/{categoryId}")]
         public async Task<IActionResult> GetProductsByCategory(int categoryId)
         {
             var products = await _productService.GetProductsByCategory(categoryId);
             return Ok(products);
-        }
-
-        [HttpGet("stock/{id}")]
-        public async Task<IActionResult> IsProductInStock(int id)
-        {
-            try
-            {
-                var isInStock = await _productService.IsProductInStock(id);
-                return Ok(isInStock);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
         }
     }
 }
