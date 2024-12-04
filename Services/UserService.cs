@@ -72,19 +72,20 @@ namespace SOA_CA2_E_Commerce.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateUserRole(int userId, UserRole newRole, int currentAdminId)
+        public async Task UpdateUserRole(int userId, UserRole newRole)
         {
-            var admin = await _context.Users.FindAsync(currentAdminId);
-            if (admin == null || admin.Role != UserRole.Admin)
-                throw new UnauthorizedAccessException("Only admins can update roles");
-
             var user = await _context.Users.FindAsync(userId);
             if (user == null) throw new KeyNotFoundException("User not found");
 
             user.Role = newRole;
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+
+            // Add logging
+            Console.WriteLine($"User {userId} role updated to {newRole}");
         }
+
+
 
         public async Task<AdminUserDTO> GetAdminCustomerById(int id)
         {

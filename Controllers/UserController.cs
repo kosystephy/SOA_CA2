@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SOA_CA2_E_Commerce.DTO;
 using SOA_CA2_E_Commerce.Enums;
 using SOA_CA2_E_Commerce.Interface;
@@ -66,14 +65,12 @@ namespace SOA_CA2_E_Commerce.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("update-role/{userId}")]
         public async Task<IActionResult> UpdateUserRole(int userId, [FromQuery] UserRole newRole)
         {
             try
             {
-                var currentAdminId = int.Parse(User.Claims.First(c => c.Type == "Id").Value);
-                await _userService.UpdateUserRole(userId, newRole, currentAdminId);
+                await _userService.UpdateUserRole(userId, newRole);
                 return Ok(new { message = "User role updated successfully" });
             }
             catch (Exception ex)

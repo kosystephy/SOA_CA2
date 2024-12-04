@@ -20,7 +20,6 @@ namespace SOA_CA2_E_Commerce.Services
             _context = context;
             _configuration = configuration;
             _jwtSecret = configuration["JwtSettings:Secret"];
-
         }
 
         public async Task<string> Register(RegisterDTO registerDto)
@@ -32,8 +31,9 @@ namespace SOA_CA2_E_Commerce.Services
 
             var salt = PasswordHelper.GenerateSalt();
             var passwordHash = PasswordHelper.HashPassword(registerDto.Password, salt);
+
+            // Generate plaintext API key
             var apiKey = ApiKeyHelper.GenerateApiKey();
-            var hashedApiKey = ApiKeyHelper.HashApiKey(apiKey);
 
             var refreshToken = Guid.NewGuid().ToString();
 
@@ -46,7 +46,7 @@ namespace SOA_CA2_E_Commerce.Services
                 Salt = salt,
                 Address = registerDto.Address,
                 Role = registerDto.Role,
-                ApiKey = hashedApiKey,
+                ApiKey = apiKey, // Store plaintext API key
                 ApiKeyExpiration = DateTime.UtcNow.AddMonths(6),
                 RefreshToken = refreshToken,
                 RefreshTokenExpiration = DateTime.UtcNow.AddDays(7),
@@ -56,7 +56,7 @@ namespace SOA_CA2_E_Commerce.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return user.ApiKey; // Return API key to the user
+            return apiKey; // Return plaintext API key to the user
         }
 
         public async Task<(string JwtToken, string RefreshToken)> Login(LoginDTO loginDto)
@@ -88,21 +88,24 @@ namespace SOA_CA2_E_Commerce.Services
             return (jwtToken, refreshToken);
         }
 
-
-
         public async Task<bool> ValidateApiKey(string apiKey)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.ApiKey == apiKey);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.ApiKey == apiKey);
             return user != null && ApiKeyHelper.ValidateApiKey(apiKey, user.ApiKeyExpiration);
         }
+
         public async Task<string> RefreshToken(string oldRefreshToken)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.RefreshToken == oldRefreshToken);
             if (user == null || user.RefreshTokenExpiration <= DateTime.UtcNow)
                 throw new UnauthorizedAccessException("Invalid or expired refresh token.");
 
-            var newJwtToken = JwtHelper.GenerateToken(user.Email, user.Role.ToString(), int.Parse(_configuration["JwtSettings:ExpiryMinutes"]),
-                _jwtSecret);
+            var newJwtToken = JwtHelper.GenerateToken(
+                user.Email,
+                user.Role.ToString(),
+                int.Parse(_configuration["JwtSettings:ExpiryMinutes"]),
+                _jwtSecret
+            );
             var newRefreshToken = Guid.NewGuid().ToString();
 
             user.RefreshToken = newRefreshToken;
@@ -119,7 +122,7 @@ namespace SOA_CA2_E_Commerce.Services
                 throw new KeyNotFoundException("Invalid refresh token.");
 
             user.RefreshToken = null; // Invalidate the refresh token
-            user.RefreshTokenExpiration=null;
+            user.RefreshTokenExpiration = null;
             await _context.SaveChangesAsync();
         }
 
@@ -132,11 +135,7 @@ namespace SOA_CA2_E_Commerce.Services
                 throw new KeyNotFoundException("User not found.");
             }
 
-            return user.ApiKey;
+            return user.ApiKey; // Return plaintext API key
         }
-
     }
-
-
 }
-

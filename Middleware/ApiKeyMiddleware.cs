@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SOA_CA2_E_Commerce.Data;
-using SOA_CA2_E_Commerce.Helpers;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
@@ -14,7 +13,7 @@ namespace SOA_CA2_E_Commerce.Middleware
 
         public async Task InvokeAsync(HttpContext context, ApplicationDbContext dbContext)
         {
-            // Skip API key validation for the Register endpoint
+            // Skip API key validation for the Register and Login endpoints
             if (context.Request.Path.StartsWithSegments("/api/Auth/register", StringComparison.OrdinalIgnoreCase) ||
                 context.Request.Path.StartsWithSegments("/api/Auth/login", StringComparison.OrdinalIgnoreCase))
             {
@@ -23,16 +22,18 @@ namespace SOA_CA2_E_Commerce.Middleware
             }
 
             // Check if the API key is present
-            if (!context.Request.Headers.TryGetValue("ApiKey", out var apiKey))
+            if (!context.Request.Headers.TryGetValue("ApiKey", out var apiKeyValues))
             {
                 context.Response.StatusCode = 401; // Unauthorized
                 await context.Response.WriteAsync("API Key is missing.");
                 return;
             }
 
+            // Convert StringValues to a plain string
+            string apiKey = apiKeyValues.ToString();
+
             // Validate the API key
-            var hashedApiKey = ApiKeyHelper.HashApiKey(apiKey);
-            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.ApiKey == hashedApiKey && u.ApiKeyExpiration > DateTime.UtcNow);
+            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.ApiKey == apiKey && u.ApiKeyExpiration > DateTime.UtcNow);
 
             if (user == null)
             {

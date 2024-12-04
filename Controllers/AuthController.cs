@@ -79,7 +79,7 @@ namespace SOA_CA2_E_Commerce.Controllers
                 return NotFound(new { Message = ex.Message });
             }
         }
-        [Authorize]
+    
         [HttpGet("api-key")]
         public async Task<IActionResult> GetApiKey()
         {

@@ -11,7 +11,7 @@ namespace SOA_CA2_E_Commerce.Interface
         Task<UserDTO> GetUserById(int id);
         Task<UserDTO> UpdateUser(int id, UserDTO userDTO);
         Task DeleteUser(int id);
-        Task UpdateUserRole(int userId, UserRole newRole, int currentAdminId);
+        Task UpdateUserRole(int userId, UserRole newRole);
         Task<AdminUserDTO> GetAdminCustomerById(int id); // For Admin Operations
     }
 
