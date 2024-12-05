@@ -163,7 +163,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                         column: x => x.Product_Id,
                         principalTable: "Products",
                         principalColumn: "Product_Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

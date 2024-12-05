@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Interface;
+using SOA_CA2_E_Commerce.Services;
 
 namespace SOA_CA2_E_Commerce.Controllers
 {
@@ -18,67 +18,44 @@ namespace SOA_CA2_E_Commerce.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
-            var products = await _productService.GetAllProducts();
+            var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(int id)
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetProductById(int productId)
         {
-            try
-            {
-                var product = await _productService.GetProductById(id);
-                return Ok(product);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var product = await _productService.GetProductByIdAsync(productId);
+            if (product == null) return NotFound("Product not found.");
+            return Ok(product);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
+        public async Task<IActionResult> AddProduct([FromBody] ProductDTO productDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var createdProduct = await _productService.CreateProduct(productDTO);
-            return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.Product_Id }, createdProduct);
+            var success = await _productService.AddProductAsync(productDto);
+            if (!success) return StatusCode(500, "Unable to add product.");
+            return Ok("Product added successfully.");
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDTO productDTO)
+        [HttpPut("{productId}")]
+        public async Task<IActionResult> UpdateProduct(int productId, [FromBody] ProductDTO productDto)
         {
-            try
-            {
-                var updatedProduct = await _productService.UpdateProduct(id, productDTO);
-                return Ok(updatedProduct);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var success = await _productService.UpdateProductAsync(productId, productDto);
+            if (!success) return NotFound("Product not found.");
+            return Ok("Product updated successfully.");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> DeleteProduct(int productId)
         {
-            try
-            {
-                await _productService.DeleteProduct(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpGet("category/{categoryId}")]
-        public async Task<IActionResult> GetProductsByCategory(int categoryId)
-        {
-            var products = await _productService.GetProductsByCategory(categoryId);
-            return Ok(products);
+            var success = await _productService.DeleteProductAsync(productId);
+            if (!success) return NotFound("Product not found.");
+            return Ok("Product deleted successfully.");
         }
     }
 }

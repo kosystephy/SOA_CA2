@@ -1,117 +1,96 @@
-﻿using SOA_CA2_E_Commerce.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SOA_CA2_E_Commerce.Data;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Interface;
-using Microsoft.EntityFrameworkCore;
 using SOA_CA2_E_Commerce.Models;
 
 namespace SOA_CA2_E_Commerce.Services
 {
     public class ProductService : IProduct
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ProductService(ApplicationDbContext context)
+        public ProductService(ApplicationDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllProducts()
+        public async Task<List<ProductDTO>> GetAllProductsAsync()
         {
-            return await _context.Products
+            return await _dbContext.Products
                 .Select(p => new ProductDTO
                 {
                     Product_Id = p.Product_Id,
+                    Category_Id = p.Category_Id,
                     Product_Name = p.Product_Name,
-                    Description = p.Description,
                     Price = p.Price,
                     Stock = p.Stock,
+                    Description = p.Description,
                     Gender = p.Gender,
-                    ImageUrl = p.ImageUrl,
-                    Category_Id = p.Category_Id
+                    ImageUrl = p.ImageUrl
                 }).ToListAsync();
         }
 
-        public async Task<ProductDTO> GetProductById(int id)
+        public async Task<ProductDTO> GetProductByIdAsync(int productId)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new KeyNotFoundException("Product not found");
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null) return null;
 
             return new ProductDTO
             {
                 Product_Id = product.Product_Id,
+                Category_Id = product.Category_Id,
                 Product_Name = product.Product_Name,
-                Description = product.Description,
                 Price = product.Price,
                 Stock = product.Stock,
+                Description = product.Description,
                 Gender = product.Gender,
-                ImageUrl = product.ImageUrl,
-                Category_Id = product.Category_Id
+                ImageUrl = product.ImageUrl
             };
         }
 
-        public async Task<ProductDTO> CreateProduct(ProductDTO productDTO)
+        public async Task<bool> AddProductAsync(ProductDTO productDto)
         {
             var product = new Product
             {
-                Product_Name = productDTO.Product_Name,
-                Description = productDTO.Description,
-                Price = productDTO.Price,
-                Stock = productDTO.Stock,
-                Gender = productDTO.Gender,
-                ImageUrl = productDTO.ImageUrl,
-                Category_Id = productDTO.Category_Id
+                Category_Id = productDto.Category_Id,
+                Product_Name = productDto.Product_Name,
+                Price = productDto.Price,
+                Stock = productDto.Stock,
+                Description = productDto.Description,
+                Gender = productDto.Gender,
+                ImageUrl = productDto.ImageUrl
             };
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            productDTO.Product_Id = product.Product_Id;
-            return productDTO;
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<ProductDTO> UpdateProduct(int id, ProductDTO productDTO)
+        public async Task<bool> UpdateProductAsync(int productId, ProductDTO productDto)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new KeyNotFoundException("Product not found");
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null) return false;
 
-            product.Product_Name = productDTO.Product_Name;
-            product.Description = productDTO.Description;
-            product.Price = productDTO.Price;
-            product.Stock = productDTO.Stock;
-            product.Gender = productDTO.Gender;
-            product.ImageUrl = productDTO.ImageUrl;
-            product.Category_Id = productDTO.Category_Id;
+            product.Category_Id = productDto.Category_Id;
+            product.Product_Name = productDto.Product_Name;
+            product.Price = productDto.Price;
+            product.Stock = productDto.Stock;
+            product.Description = productDto.Description;
+            product.Gender = productDto.Gender;
+            product.ImageUrl = productDto.ImageUrl;
 
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
-
-            return productDTO;
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteProduct(int id)
+        public async Task<bool> DeleteProductAsync(int productId)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new KeyNotFoundException("Product not found");
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null) return false;
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<ProductDTO>> GetProductsByCategory(int categoryId)
-        {
-            return await _context.Products
-                .Where(p => p.Category_Id == categoryId)
-                .Select(p => new ProductDTO
-                {
-                    Product_Id = p.Product_Id,
-                    Product_Name = p.Product_Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    Gender = p.Gender,
-                    ImageUrl = p.ImageUrl,
-                    Category_Id = p.Category_Id
-                }).ToListAsync();
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

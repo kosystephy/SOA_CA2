@@ -279,7 +279,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.HasOne("SOA_CA2_E_Commerce.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("Product_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cart");

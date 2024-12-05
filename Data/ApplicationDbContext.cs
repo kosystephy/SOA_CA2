@@ -18,110 +18,59 @@ namespace SOA_CA2_E_Commerce.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Define Primary Keys and Auto-Increment
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.User_Id);
-            modelBuilder.Entity<User>()
-                .Property(u => u.User_Id)
-                .ValueGeneratedOnAdd();
+            // **Primary Keys and Auto-Increment**
+            modelBuilder.Entity<User>().HasKey(u => u.User_Id);
+            modelBuilder.Entity<User>().Property(u => u.User_Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Category>()
-                .HasKey(c => c.Category_Id);
-            modelBuilder.Entity<Category>()
-                .Property(c => c.Category_Id)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Category>().HasKey(c => c.Category_Id);
+            modelBuilder.Entity<Category>().Property(c => c.Category_Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Order>()
-                .HasKey(o => o.Order_Id);
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Order_Id)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Product>().HasKey(p => p.Product_Id);
+            modelBuilder.Entity<Product>().Property(p => p.Product_Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<OrderItem>()
-                .HasKey(oi => oi.OrderItem_Id);
-            modelBuilder.Entity<OrderItem>()
-                .Property(oi => oi.OrderItem_Id)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Cart>().HasKey(c => c.Cart_Id);
+            modelBuilder.Entity<Cart>().Property(c => c.Cart_Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Product>()
-                .HasKey(p => p.Product_Id);
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Product_Id)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<CartItem>().HasKey(ci => ci.CartItem_Id);
+            modelBuilder.Entity<CartItem>().Property(ci => ci.CartItem_Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Cart>()
-                .HasKey(c => c.Cart_Id);
-            modelBuilder.Entity<Cart>()
-                .Property(c => c.Cart_Id)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Order>().HasKey(o => o.Order_Id);
+            modelBuilder.Entity<Order>().Property(o => o.Order_Id).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<CartItem>()
-                .HasKey(ci => ci.CartItem_Id);
-            modelBuilder.Entity<CartItem>()
-                .Property(ci => ci.CartItem_Id)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<OrderItem>().HasKey(oi => oi.OrderItem_Id);
+            modelBuilder.Entity<OrderItem>().Property(oi => oi.OrderItem_Id).ValueGeneratedOnAdd();
 
-            // Define Unique Constraints
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.ApiKey)
-                .IsUnique();
+            // **Unique Constraints**
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.ApiKey).IsUnique();
 
-            modelBuilder.Entity<Category>()
-                .HasIndex(c => c.CategoryName)
-                .IsUnique();
+            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(p => new { p.Product_Name, p.Category_Id }).IsUnique();
 
-            modelBuilder.Entity<Product>()
-                .HasIndex(p => new { p.Product_Name, p.Category_Id })
-                .IsUnique();
-
-            // User Configuration
-            modelBuilder.Entity<User>()
-                .Property(u => u.Role)
-                .HasDefaultValue(UserRole.Customer);
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.ApiKeyExpiration)
-                .IsRequired(false);
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.RefreshToken)
-                .IsRequired(false);
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.RefreshTokenExpiration)
-                .IsRequired(false);
-
-            // Product Configuration
-            modelBuilder.Entity<Product>()
-                .Property(p => p.ImageUrl)
-                .IsRequired(false);
-
+            // **Relationships**
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.Category_Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Relationships
             modelBuilder.Entity<Cart>()
-            .HasOne(c => c.User)         // Navigation property
-             .WithMany(u => u.Carts)      // Collection property in User
-             .HasForeignKey(c => c.User_Id) // FK property
-              .OnDelete(DeleteBehavior.Cascade); // Define delete behavior
+                .HasOne(c => c.User)
+                .WithMany(u => u.Carts)
+                .HasForeignKey(c => c.User_Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(ci => ci.Cart)
                 .WithMany(c => c.CartItems)
-                .HasForeignKey(ci => ci.Cart_Id);
+                .HasForeignKey(ci => ci.Cart_Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(ci => ci.Product)
                 .WithMany()
                 .HasForeignKey(ci => ci.Product_Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
@@ -141,7 +90,24 @@ namespace SOA_CA2_E_Commerce.Data
                 .HasForeignKey(oi => oi.Product_Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Enum configuration for cleaner mapping
+            // **Default Values**
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasDefaultValue(UserRole.Customer);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.ApiKeyExpiration)
+                .IsRequired(false);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.RefreshToken)
+                .IsRequired(false);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.RefreshTokenExpiration)
+                .IsRequired(false);
+
+            // **Enum-to-String Conversion**
             modelBuilder.Entity<Product>()
                 .Property(p => p.Gender)
                 .HasConversion<string>();
@@ -149,6 +115,11 @@ namespace SOA_CA2_E_Commerce.Data
             modelBuilder.Entity<Order>()
                 .Property(o => o.Status)
                 .HasConversion<string>();
+
+            // **Optional Fields**
+            modelBuilder.Entity<Product>()
+                .Property(p => p.ImageUrl)
+                .IsRequired(false);
         }
     }
 }

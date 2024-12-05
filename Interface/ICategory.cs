@@ -1,14 +1,13 @@
 ﻿using SOA_CA2_E_Commerce.DTO;
 
-namespace SOA_CA2_E_Commerce.Interface
+namespace SOA_CA2_E_Commerce.Services
 {
     public interface ICategory
     {
-        Task<IEnumerable<CategoryDTO>> GetAllCategories();
-        Task<CategoryDTO> GetCategoryById(int id);
-        Task<CategoryDTO> CreateCategory(CategoryDTO categoryDTO);
-        Task<CategoryDTO> UpdateCategory(int id, CategoryDTO categoryDTO);
-        Task DeleteCategory(int id);
-
+        Task<List<CategoryDTO>> GetAllCategoriesAsync();
+        Task<CategoryDTO> GetCategoryByIdAsync(int categoryId);
+        Task<bool> AddCategoryAsync(CategoryDTO categoryDto);
+        Task<bool> UpdateCategoryAsync(int categoryId, CategoryDTO categoryDto);
+        Task<bool> DeleteCategoryAsync(int categoryId);
     }
 }

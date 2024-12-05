@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Interface;
+using SOA_CA2_E_Commerce.Services;
 
 namespace SOA_CA2_E_Commerce.Controllers
 {
@@ -18,60 +18,44 @@ namespace SOA_CA2_E_Commerce.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
-            var categories = await _categoryService.GetAllCategories();
+            var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryById(int id)
+        [HttpGet("{categoryId}")]
+        public async Task<IActionResult> GetCategoryById(int categoryId)
         {
-            try
-            {
-                var category = await _categoryService.GetCategoryById(id);
-                return Ok(category);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+            if (category == null) return NotFound("Category not found.");
+            return Ok(category);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CategoryDTO categoryDTO)
+        public async Task<IActionResult> AddCategory([FromBody] CategoryDTO categoryDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var createdCategory = await _categoryService.CreateCategory(categoryDTO);
-            return CreatedAtAction(nameof(GetCategoryById), new { id = createdCategory.Category_Id }, createdCategory);
+            var success = await _categoryService.AddCategoryAsync(categoryDto);
+            if (!success) return StatusCode(500, "Unable to add category.");
+            return Ok("Category added successfully.");
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryDTO categoryDTO)
+        [HttpPut("{categoryId}")]
+        public async Task<IActionResult> UpdateCategory(int categoryId, [FromBody] CategoryDTO categoryDto)
         {
-            try
-            {
-                var updatedCategory = await _categoryService.UpdateCategory(id, categoryDTO);
-                return Ok(updatedCategory);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var success = await _categoryService.UpdateCategoryAsync(categoryId, categoryDto);
+            if (!success) return NotFound("Category not found.");
+            return Ok("Category updated successfully.");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        [HttpDelete("{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
-            try
-            {
-                await _categoryService.DeleteCategory(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var success = await _categoryService.DeleteCategoryAsync(categoryId);
+            if (!success) return NotFound("Category not found.");
+            return Ok("Category deleted successfully.");
         }
     }
 }

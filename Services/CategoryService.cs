@@ -1,23 +1,22 @@
-﻿using SOA_CA2_E_Commerce.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SOA_CA2_E_Commerce.Data;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Interface;
-using Microsoft.EntityFrameworkCore;
 using SOA_CA2_E_Commerce.Models;
 
 namespace SOA_CA2_E_Commerce.Services
 {
     public class CategoryService : ICategory
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
 
-        public CategoryService(ApplicationDbContext context)
+        public CategoryService(ApplicationDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<CategoryDTO>> GetAllCategories()
+        public async Task<List<CategoryDTO>> GetAllCategoriesAsync()
         {
-            return await _context.Categories
+            return await _dbContext.Categories
                 .Select(c => new CategoryDTO
                 {
                     Category_Id = c.Category_Id,
@@ -25,10 +24,10 @@ namespace SOA_CA2_E_Commerce.Services
                 }).ToListAsync();
         }
 
-        public async Task<CategoryDTO> GetCategoryById(int id)
+        public async Task<CategoryDTO> GetCategoryByIdAsync(int categoryId)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null) throw new KeyNotFoundException("Category not found");
+            var category = await _dbContext.Categories.FindAsync(categoryId);
+            if (category == null) return null;
 
             return new CategoryDTO
             {
@@ -37,40 +36,36 @@ namespace SOA_CA2_E_Commerce.Services
             };
         }
 
-        public async Task<CategoryDTO> CreateCategory(CategoryDTO categoryDTO)
+        public async Task<bool> AddCategoryAsync(CategoryDTO categoryDto)
         {
             var category = new Category
             {
-                CategoryName = categoryDTO.CategoryName
+                CategoryName = categoryDto.CategoryName
             };
 
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            categoryDTO.Category_Id = category.Category_Id;
-            return categoryDTO;
+            _dbContext.Categories.Add(category);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<CategoryDTO> UpdateCategory(int id, CategoryDTO categoryDTO)
+        public async Task<bool> UpdateCategoryAsync(int categoryId, CategoryDTO categoryDto)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null) throw new KeyNotFoundException("Category not found");
+            var category = await _dbContext.Categories.FindAsync(categoryId);
+            if (category == null) return false;
 
-            category.CategoryName = categoryDTO.CategoryName;
-
-            _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
-
-            return categoryDTO;
+            category.CategoryName = categoryDto.CategoryName;
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteCategory(int id)
+        public async Task<bool> DeleteCategoryAsync(int categoryId)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null) throw new KeyNotFoundException("Category not found");
+            var category = await _dbContext.Categories.FindAsync(categoryId);
+            if (category == null) return false;
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            _dbContext.Categories.Remove(category);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

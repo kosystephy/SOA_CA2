@@ -142,11 +142,12 @@ namespace SOA_CA2_E_Commerce.Data
                 context.SaveChanges();
             }
 
-            // Seed CartItems
+            // Seed Cart Items
             if (!context.CartItems.Any())
             {
                 var cart = context.Carts.First();
                 var tShirt = context.Products.First(p => p.Product_Name == "T-Shirt");
+
                 context.CartItems.Add(
                     new CartItem
                     {
@@ -162,22 +163,18 @@ namespace SOA_CA2_E_Commerce.Data
             if (!context.Orders.Any())
             {
                 var userJane = context.Users.First(u => u.Email == "jane.smith@example.com");
-                context.Orders.Add(
-                    new Order
-                    {
-                        User_Id = userJane.User_Id,
-                        CreatedAt = DateTime.UtcNow,
-                        Total_Amount = 99.98M,
-                        Status = OrderStatus.Pending
-                    }
-                );
+                var order = new Order
+                {
+                    User_Id = userJane.User_Id,
+                    Order_Date = DateTime.UtcNow,
+                    Total_Amount = 99.98M,
+                    Status = OrderStatus.Pending,
+                    CreatedAt = DateTime.UtcNow
+                };
+                context.Orders.Add(order);
                 context.SaveChanges();
-            }
 
-            // Seed OrderItems
-            if (!context.OrderItems.Any())
-            {
-                var order = context.Orders.First();
+                // Seed Order Items
                 var jeans = context.Products.First(p => p.Product_Name == "Jeans");
                 context.OrderItems.Add(
                     new OrderItem
@@ -192,4 +189,5 @@ namespace SOA_CA2_E_Commerce.Data
             }
         }
     }
-}
+    }
+

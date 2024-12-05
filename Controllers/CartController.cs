@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using SOA_CA2_E_Commerce.DTO;
 using SOA_CA2_E_Commerce.Interface;
+using SOA_CA2_E_Commerce.Services;
 
 namespace SOA_CA2_E_Commerce.Controllers
 {
@@ -15,70 +18,42 @@ namespace SOA_CA2_E_Commerce.Controllers
             _cartService = cartService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllCarts()
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetCart(int userId)
         {
-            var carts = await _cartService.GetAllCarts();
-            return Ok(carts);
-        }
+            var cart = await _cartService.GetCartByUserIdAsync(userId);
+            if (cart == null) return NotFound("Cart not found.");
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCartById(int id)
-        {
-            try
-            {
-                var cart = await _cartService.GetCartById(id);
-                return Ok(cart);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCart([FromBody] CartDTO cartDTO)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var createdCart = await _cartService.CreateCart(cartDTO);
-            return CreatedAtAction(nameof(GetCartById), new { id = createdCart.Cart_Id }, createdCart);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCart(int id, [FromBody] CartDTO cartDTO)
-        {
-            try
-            {
-                var updatedCart = await _cartService.UpdateCart(id, cartDTO);
-                return Ok(updatedCart);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCart(int id)
-        {
-            try
-            {
-                await _cartService.DeleteCart(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetOrCreateCart(int userId)
-        {
-            var cart = await _cartService.GetOrCreateCart(userId);
             return Ok(cart);
+        }
+
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> AddToCart(int userId, [FromBody] CartItemDTO cartItemDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var success = await _cartService.AddToCartAsync(userId, cartItemDto);
+            if (!success) return StatusCode(500, "Unable to add to cart.");
+
+            return Ok("Item added to cart.");
+        }
+
+        [HttpDelete("{userId}/product/{productId}")]
+        public async Task<IActionResult> RemoveFromCart(int userId, int productId)
+        {
+            var success = await _cartService.RemoveFromCartAsync(userId, productId);
+            if (!success) return NotFound("Item not found in cart.");
+
+            return Ok("Item removed from cart.");
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> ClearCart(int userId)
+        {
+            var success = await _cartService.ClearCartAsync(userId);
+            if (!success) return NotFound("Cart not found.");
+
+            return Ok("Cart cleared.");
         }
     }
 }

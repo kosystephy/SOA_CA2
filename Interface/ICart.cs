@@ -5,11 +5,9 @@ namespace SOA_CA2_E_Commerce.Interface
 {
     public interface ICart
     {
-        Task<IEnumerable<CartDTO>> GetAllCarts();
-        Task<CartDTO> GetCartById(int id);
-        Task<CartDTO> CreateCart(CartDTO cartDTO);
-        Task<CartDTO> UpdateCart(int id, CartDTO cartDTO);
-        Task DeleteCart(int id);
-        Task<CartDTO> GetOrCreateCart(int userId);
+        Task<CartDTO> GetCartByUserIdAsync(int userId);
+        Task<bool> AddToCartAsync(int userId, CartItemDTO cartItemDto);
+        Task<bool> RemoveFromCartAsync(int userId, int productId);
+        Task<bool> ClearCartAsync(int userId);
     }
 }

@@ -87,21 +87,18 @@ namespace SOA_CA2_E_Commerce.Services
 
 
 
-        public async Task<AdminUserDTO> GetAdminCustomerById(int id)
+
+        public async Task<int> GetUserIdByApiKey(string apiKey)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new KeyNotFoundException("User not found");
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.ApiKey == apiKey && u.ApiKeyExpiration > DateTime.UtcNow);
 
-            return new AdminUserDTO
+            if (user == null)
             {
-                User_Id = user.User_Id,
-                First_Name = user.First_Name,
-                Last_Name = user.Last_Name,
-                Email = user.Email,
-                Role = user.Role ?? UserRole.Customer, // Use default if Role is null
-                Address = user.Address
-            };
-        }
+                throw new UnauthorizedAccessException("Invalid or expired API Key.");
+            }
 
+            return user.User_Id;
+        }
     }
 }

@@ -2,18 +2,15 @@
 using System.Threading.Tasks;
 using SOA_CA2_E_Commerce.DTO;
 
-namespace SOA_CA2_E_Commerce.Interface
+namespace SOA_CA2_E_Commerce.Services
 {
     public interface IProduct
     {
-        Task<IEnumerable<ProductDTO>> GetAllProducts();
-        Task<ProductDTO> GetProductById(int id);
-        Task<ProductDTO> CreateProduct(ProductDTO productDTO);
-        Task<ProductDTO> UpdateProduct(int id, ProductDTO productDTO);
-        Task DeleteProduct(int id);
-        Task<IEnumerable<ProductDTO>> GetProductsByCategory(int categoryId);
-    
-
-
+        Task<List<ProductDTO>> GetAllProductsAsync();
+        Task<ProductDTO> GetProductByIdAsync(int productId);
+        Task<bool> AddProductAsync(ProductDTO productDto);
+        Task<bool> UpdateProductAsync(int productId, ProductDTO productDto);
+        Task<bool> DeleteProductAsync(int productId);
     }
 }
+

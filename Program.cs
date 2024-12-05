@@ -50,9 +50,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IProduct, ProductService>();
 builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IOrder, OrderService>();
-builder.Services.AddScoped<IOrderItem, OrderItemService>();
 builder.Services.AddScoped<ICart, CartService>();
-builder.Services.AddScoped<ICartItem, CartItemService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<AuthService>();
 
