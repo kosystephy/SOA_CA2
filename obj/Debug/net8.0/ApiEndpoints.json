@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "GetAllCustomers",
-    "RelativePath": "api/Customers",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.AuthController",
+    "Method": "GetApiKey",
+    "RelativePath": "api/Auth/api-key",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -10,31 +10,79 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "CreateCustomer",
-    "RelativePath": "api/Customers",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "customerDto",
-        "Type": "SOA_CA2_E_Commerce.DTO.CustomersDTO",
+        "Name": "loginDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.LoginDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "GetCustomerById",
-    "RelativePath": "api/Customers/{id}",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.AuthController",
+    "Method": "RefreshToken",
+    "RelativePath": "api/Auth/refresh-token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "oldRefreshToken",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.RegisterDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.AuthController",
+    "Method": "RevokeToken",
+    "RelativePath": "api/Auth/revoke-token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "refreshToken",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CartController",
+    "Method": "GetCart",
+    "RelativePath": "api/Cart/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -42,36 +90,36 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "UpdateCustomer",
-    "RelativePath": "api/Customers/{id}",
-    "HttpMethod": "PUT",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CartController",
+    "Method": "AddToCart",
+    "RelativePath": "api/Cart/{userId}",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       },
       {
-        "Name": "customerDto",
-        "Type": "SOA_CA2_E_Commerce.DTO.CustomersDTO",
+        "Name": "cartItemDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.CartItemDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "DeleteCustomer",
-    "RelativePath": "api/Customers/{id}",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CartController",
+    "Method": "ClearCart",
+    "RelativePath": "api/Cart/{userId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -79,45 +127,103 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "GetCustomerByEmail",
-    "RelativePath": "api/Customers/email/{email}",
-    "HttpMethod": "GET",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CartController",
+    "Method": "RemoveFromCart",
+    "RelativePath": "api/Cart/{userId}/product/{productId}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "email",
-        "Type": "System.String",
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CustomersController",
-    "Method": "SearchCustomersByName",
-    "RelativePath": "api/Customers/search",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CategoryController",
+    "Method": "GetAllCategories",
+    "RelativePath": "api/Category",
     "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CategoryController",
+    "Method": "AddCategory",
+    "RelativePath": "api/Category",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "name",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "categoryDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.CategoryDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.OrderController",
-    "Method": "GetAllOrders",
-    "RelativePath": "api/Order",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CategoryController",
+    "Method": "GetCategoryById",
+    "RelativePath": "api/Category/{categoryId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CategoryController",
+    "Method": "UpdateCategory",
+    "RelativePath": "api/Category/{categoryId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "categoryDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.CategoryDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.CategoryController",
+    "Method": "DeleteCategory",
+    "RelativePath": "api/Category/{categoryId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -129,8 +235,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "orderDTO",
-        "Type": "SOA_CA2_E_Commerce.DTO.OrdersDTO",
+        "Name": "orderDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.OrderDTO",
         "IsRequired": true
       }
     ],
@@ -138,68 +244,15 @@
   },
   {
     "ContainingType": "SOA_CA2_E_Commerce.Controllers.OrderController",
-    "Method": "GetOrderById",
-    "RelativePath": "api/Order/{id}",
+    "Method": "GetOrdersByUserId",
+    "RelativePath": "api/Order/user/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.OrderController",
-    "Method": "UpdateOrder",
-    "RelativePath": "api/Order/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "orderDTO",
-        "Type": "SOA_CA2_E_Commerce.DTO.OrdersDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.OrderController",
-    "Method": "DeleteOrder",
-    "RelativePath": "api/Order/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.OrderController",
-    "Method": "GetOrdersByStatus",
-    "RelativePath": "api/Order/status/{status}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "status",
-        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -217,7 +270,7 @@
   },
   {
     "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
-    "Method": "CreateProduct",
+    "Method": "AddProduct",
     "RelativePath": "api/Product",
     "HttpMethod": "POST",
     "IsController": true,
@@ -225,7 +278,7 @@
     "Parameters": [
       {
         "Name": "productDto",
-        "Type": "SOA_CA2_E_Commerce.DTO.ProductsDTO",
+        "Type": "SOA_CA2_E_Commerce.DTO.ProductDTO",
         "IsRequired": true
       }
     ],
@@ -234,7 +287,70 @@
   {
     "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
     "Method": "GetProductById",
-    "RelativePath": "api/Product/{id}",
+    "RelativePath": "api/Product/{productId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
+    "Method": "UpdateProduct",
+    "RelativePath": "api/Product/{productId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "productDto",
+        "Type": "SOA_CA2_E_Commerce.DTO.ProductDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
+    "Method": "DeleteProduct",
+    "RelativePath": "api/Product/{productId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.UserController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/User",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.UserController",
+    "Method": "GetUserById",
+    "RelativePath": "api/User/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -248,9 +364,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
-    "Method": "UpdateProduct",
-    "RelativePath": "api/Product/{id}",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.UserController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/User/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -261,17 +377,17 @@
         "IsRequired": true
       },
       {
-        "Name": "productDto",
-        "Type": "SOA_CA2_E_Commerce.DTO.ProductsDTO",
+        "Name": "userDTO",
+        "Type": "SOA_CA2_E_Commerce.DTO.UserDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
-    "Method": "DeleteProduct",
-    "RelativePath": "api/Product/{id}",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.UserController",
+    "Method": "DeleteUser",
+    "RelativePath": "api/User/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -285,49 +401,22 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
-    "Method": "GetProductsByCategory",
-    "RelativePath": "api/Product/category/{categoryId}",
-    "HttpMethod": "GET",
+    "ContainingType": "SOA_CA2_E_Commerce.Controllers.UserController",
+    "Method": "UpdateUserRole",
+    "RelativePath": "api/User/update-role/{userId}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "categoryId",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
-    "Method": "SearchProductsByName",
-    "RelativePath": "api/Product/search",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
+      },
       {
-        "Name": "productName",
+        "Name": "newRole",
         "Type": "System.String",
         "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SOA_CA2_E_Commerce.Controllers.ProductController",
-    "Method": "IsProductInStock",
-    "RelativePath": "api/Product/stock/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": []

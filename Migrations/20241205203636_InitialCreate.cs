@@ -21,7 +21,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                 {
                     Category_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CategoryName = table.Column<string>(type: "longtext", nullable: false)
+                    CategoryName = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -31,30 +31,35 @@ namespace SOA_CA2_E_Commerce.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "Users",
                 columns: table => new
                 {
-                    Customer_Id = table.Column<int>(type: "int", nullable: false)
+                    User_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     First_Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Last_Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PasswordHash = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Salt = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Role = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: true, defaultValue: 1),
                     Address = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    ApiKey = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RefreshToken = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RefreshTokenExpiration = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ApiKeyExpiration = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Customer_Id);
+                    table.PrimaryKey("PK_Users", x => x.User_Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -65,17 +70,15 @@ namespace SOA_CA2_E_Commerce.Migrations
                     Product_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Category_Id = table.Column<int>(type: "int", nullable: false),
-                    Product_Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Brand = table.Column<string>(type: "longtext", nullable: false)
+                    Product_Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Image = table.Column<string>(type: "longtext", nullable: false)
+                    Gender = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -91,25 +94,22 @@ namespace SOA_CA2_E_Commerce.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Auths",
+                name: "Carts",
                 columns: table => new
                 {
-                    Auth_Id = table.Column<int>(type: "int", nullable: false)
+                    Cart_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Customer_Id = table.Column<int>(type: "int", nullable: false),
-                    Api_Key = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    User_Id = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Auths", x => x.Auth_Id);
+                    table.PrimaryKey("PK_Carts", x => x.Cart_Id);
                     table.ForeignKey(
-                        name: "FK_Auths_Customers_Customer_Id",
-                        column: x => x.Customer_Id,
-                        principalTable: "Customers",
-                        principalColumn: "Customer_Id",
+                        name: "FK_Carts_Users_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "Users",
+                        principalColumn: "User_Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -120,21 +120,50 @@ namespace SOA_CA2_E_Commerce.Migrations
                 {
                     Order_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Customer_Id = table.Column<int>(type: "int", nullable: false),
+                    User_Id = table.Column<int>(type: "int", nullable: false),
                     Order_Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Total_Amount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Payment_Method = table.Column<int>(type: "int", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Order_Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Customers_Customer_Id",
-                        column: x => x.Customer_Id,
-                        principalTable: "Customers",
-                        principalColumn: "Customer_Id",
+                        name: "FK_Orders_Users_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "Users",
+                        principalColumn: "User_Id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    CartItem_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Cart_Id = table.Column<int>(type: "int", nullable: false),
+                    Product_Id = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.CartItem_Id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Carts_Cart_Id",
+                        column: x => x.Cart_Id,
+                        principalTable: "Carts",
+                        principalColumn: "Cart_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Products_Product_Id",
+                        column: x => x.Product_Id,
+                        principalTable: "Products",
+                        principalColumn: "Product_Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -142,7 +171,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    Item_Id = table.Column<int>(type: "int", nullable: false)
+                    OrderItem_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Order_Id = table.Column<int>(type: "int", nullable: false),
                     Product_Id = table.Column<int>(type: "int", nullable: false),
@@ -151,7 +180,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Item_Id);
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItem_Id);
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_Order_Id",
                         column: x => x.Order_Id,
@@ -163,14 +192,30 @@ namespace SOA_CA2_E_Commerce.Migrations
                         column: x => x.Product_Id,
                         principalTable: "Products",
                         principalColumn: "Product_Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Auths_Customer_Id",
-                table: "Auths",
-                column: "Customer_Id");
+                name: "IX_CartItems_Cart_Id",
+                table: "CartItems",
+                column: "Cart_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_Product_Id",
+                table: "CartItems",
+                column: "Product_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_User_Id",
+                table: "Carts",
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_CategoryName",
+                table: "Categories",
+                column: "CategoryName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_Order_Id",
@@ -183,24 +228,45 @@ namespace SOA_CA2_E_Commerce.Migrations
                 column: "Product_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_Customer_Id",
+                name: "IX_Orders_User_Id",
                 table: "Orders",
-                column: "Customer_Id");
+                column: "User_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_Category_Id",
                 table: "Products",
                 column: "Category_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_Product_Name_Category_Id",
+                table: "Products",
+                columns: new[] { "Product_Name", "Category_Id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ApiKey",
+                table: "Users",
+                column: "ApiKey",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Auths");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -209,7 +275,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Categories");

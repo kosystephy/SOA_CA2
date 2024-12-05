@@ -2,9 +2,9 @@
 
 namespace SOA_CA2_E_Commerce.Models
 {
-    public class OrderItems
+    public class OrderItem
     {
-        public int Item_Id { get; set; }
+        public int OrderItem_Id { get; set; }
 
         [Required]
         public int Order_Id { get; set; }
@@ -21,8 +21,8 @@ namespace SOA_CA2_E_Commerce.Models
         [Required]
         public decimal TotalPrice => Quantity * Price; // Computed Property
 
-        public Orders Order { get; set; }
+        public Order Order { get; set; }
 
-        public Products Product { get; set; }
+        public Product Product { get; set; }
     }
 }

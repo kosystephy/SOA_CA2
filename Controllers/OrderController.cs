@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Interface;
-using System;
-using System.Threading.Tasks;
+using SOA_CA2_E_Commerce.Services;
 
 namespace SOA_CA2_E_Commerce.Controllers
 {
@@ -17,74 +15,21 @@ namespace SOA_CA2_E_Commerce.Controllers
             _orderService = orderService;
         }
 
-        // Get all orders
-        [HttpGet]
-        public async Task<IActionResult> GetAllOrders()
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetOrdersByUserId(int userId)
         {
-            var orders = await _orderService.GetAllOrders();
+            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
             return Ok(orders);
         }
 
-        // Get order by ID
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrderById(int id)
-        {
-            var order = await _orderService.GetOrderById(id);
-            if (order == null) return NotFound($"Order with ID {id} not found.");
-            return Ok(order);
-        }
-
-        // Create a new order
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] OrdersDTO orderDTO)
+        public async Task<IActionResult> CreateOrder([FromBody] OrderDTO orderDto)
         {
-            try
-            {
-                await _orderService.CreateOrder(orderDTO);
-                return CreatedAtAction(nameof(GetOrderById), new { id = orderDTO.Order_Id }, orderDTO);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        // Update an existing order
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, [FromBody] OrdersDTO orderDTO)
-        {
-            try
-            {
-                await _orderService.UpdateOrder(id, orderDTO);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        // Delete an order
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(int id)
-        {
-            await _orderService.DeleteOrder(id);
-            return NoContent();
-        }
-
-        // Get orders by status
-        [HttpGet("status/{status}")]
-        public async Task<IActionResult> GetOrdersByStatus(string status)
-        {
-            try
-            {
-                var orders = await _orderService.GetOrdersByStatus(status);
-                return Ok(orders);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var success = await _orderService.CreateOrderAsync(orderDto);
+            if (!success) return StatusCode(500, "Unable to create order.");
+            return Ok("Order created successfully.");
         }
     }
 }

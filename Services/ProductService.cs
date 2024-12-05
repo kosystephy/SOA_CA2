@@ -1,166 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SOA_CA2_E_Commerce.Data;
 using SOA_CA2_E_Commerce.DTO;
-using SOA_CA2_E_Commerce.Interface;
 using SOA_CA2_E_Commerce.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SOA_CA2_E_Commerce.Services
 {
     public class ProductService : IProduct
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ProductService(ApplicationDbContext context)
+        public ProductService(ApplicationDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<ProductsDTO>> GetAllProducts()
+        public async Task<List<ProductDTO>> GetAllProductsAsync()
         {
-            return await _context.Products
-                .Select(p => new ProductsDTO
+            return await _dbContext.Products
+                .Select(p => new ProductDTO
                 {
                     Product_Id = p.Product_Id,
+                    Category_Id = p.Category_Id,
                     Product_Name = p.Product_Name,
-                    Brand = p.Brand,
                     Price = p.Price,
                     Stock = p.Stock,
-                    Category_Id = p.Category_Id,
                     Description = p.Description,
                     Gender = p.Gender,
-                    Image = string.IsNullOrEmpty(p.Image) ? "default.jpg" : p.Image,
-                })
-                .ToListAsync();
+                    ImageUrl = p.ImageUrl
+                }).ToListAsync();
         }
 
-        public async Task<ProductsDTO> GetProductById(int id)
+        public async Task<ProductDTO> GetProductByIdAsync(int productId)
         {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null) return null;
 
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
-                throw new KeyNotFoundException("Product not found");
-
-            return new ProductsDTO
+            return new ProductDTO
             {
                 Product_Id = product.Product_Id,
+                Category_Id = product.Category_Id,
                 Product_Name = product.Product_Name,
-                Brand = product.Brand,
                 Price = product.Price,
                 Stock = product.Stock,
-                Category_Id = product.Category_Id,
                 Description = product.Description,
                 Gender = product.Gender,
-                Image = string.IsNullOrEmpty(product.Image) ? "default.jpg" : product.Image
+                ImageUrl = product.ImageUrl
             };
         }
 
-        public async Task<ProductsDTO> CreateProduct(ProductsDTO productDTO)
+        public async Task<bool> AddProductAsync(ProductDTO productDto)
         {
-            var product = new Products
+            var product = new Product
             {
-                Product_Name = productDTO.Product_Name,
-                Brand = productDTO.Brand,
-                Price = productDTO.Price,
-                Stock = productDTO.Stock,
-                Category_Id = productDTO.Category_Id,
-                Description = productDTO.Description,
-                Gender = productDTO.Gender,
-                Image = string.IsNullOrEmpty(productDTO.Image) ? "default.jpg" : productDTO.Image
+                Category_Id = productDto.Category_Id,
+                Product_Name = productDto.Product_Name,
+                Price = productDto.Price,
+                Stock = productDto.Stock,
+                Description = productDto.Description,
+                Gender = productDto.Gender,
+                ImageUrl = productDto.ImageUrl
             };
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            productDTO.Product_Id = product.Product_Id;
-            return productDTO;
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<ProductsDTO> UpdateProduct(int id, ProductsDTO productDTO)
+        public async Task<bool> UpdateProductAsync(int productId, ProductDTO productDto)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null) return false;
 
-            if (product == null)
-                throw new KeyNotFoundException("Product not found");
+            product.Category_Id = productDto.Category_Id;
+            product.Product_Name = productDto.Product_Name;
+            product.Price = productDto.Price;
+            product.Stock = productDto.Stock;
+            product.Description = productDto.Description;
+            product.Gender = productDto.Gender;
+            product.ImageUrl = productDto.ImageUrl;
 
-            product.Product_Name = productDTO.Product_Name;
-            product.Brand = productDTO.Brand;
-            product.Price = productDTO.Price;
-            product.Stock = productDTO.Stock;
-            product.Category_Id = productDTO.Category_Id;
-            product.Description = productDTO.Description;
-            product.Gender = productDTO.Gender;
-            product.Image = string.IsNullOrEmpty(productDTO.Image) ? "default.jpg" : productDTO.Image;
-
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
-
-            return productDTO;
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteProduct(int id)
+        public async Task<bool> DeleteProductAsync(int productId)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null) return false;
 
-            if (product == null)
-                throw new KeyNotFoundException("Product not found");
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<ProductsDTO>> SearchProductsByName(string Product_Name)
-        {
-            return await _context.Products
-                .Where(p => p.Product_Name.Contains(Product_Name, StringComparison.OrdinalIgnoreCase))
-                .Select(p => new ProductsDTO
-                {
-                    Product_Id = p.Product_Id,
-                    Product_Name = p.Product_Name,
-                    Brand = p.Brand,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    Category_Id = p.Category_Id,
-                    Description = p.Description,
-                    Gender = p.Gender,
-                     Image = string.IsNullOrEmpty(p.Image) ? "default.jpg" : p.Image
-                })
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<ProductsDTO>> GetProductsByCategory(int Category_Id)
-        {
-            return await _context.Products
-                .Where(p => p.Category_Id == Category_Id)
-                .Select(p => new ProductsDTO
-                {
-                    Product_Id = p.Product_Id,
-                    Product_Name = p.Product_Name,
-                    Brand = p.Brand,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    Category_Id = p.Category_Id,
-                    Description = p.Description,
-                    Gender = p.Gender,
-                    Image = string.IsNullOrEmpty(p.Image) ? "default.jpg" : p.Image
-
-                })
-                .ToListAsync();
-        }
-
-        public async Task<bool> IsProductInStock(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                throw new KeyNotFoundException("Product not found");
-
-            return product.Stock > 0;
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
-

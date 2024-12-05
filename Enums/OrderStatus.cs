@@ -2,6 +2,7 @@
 {
     public enum OrderStatus
     {
+        Cart,
         Pending,
         Completed,
         Cancelled,
