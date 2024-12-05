@@ -13,9 +13,11 @@ namespace SOA_CA2_E_Commerce.Middleware
 
         public async Task InvokeAsync(HttpContext context, ApplicationDbContext dbContext)
         {
-            // Skip API key validation for the Register and Login endpoints
+            // Skip API key validation for specific endpoints and conditions
             if (context.Request.Path.StartsWithSegments("/api/Auth/register", StringComparison.OrdinalIgnoreCase) ||
-                context.Request.Path.StartsWithSegments("/api/Auth/login", StringComparison.OrdinalIgnoreCase))
+                context.Request.Path.StartsWithSegments("/api/Auth/login", StringComparison.OrdinalIgnoreCase) ||
+                (context.Request.Path.StartsWithSegments("/api/Product", StringComparison.OrdinalIgnoreCase) && context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase)) ||
+                (context.Request.Path.StartsWithSegments("/api/Category", StringComparison.OrdinalIgnoreCase) && context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase)))
             {
                 await _next(context);
                 return;
