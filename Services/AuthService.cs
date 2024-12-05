@@ -7,6 +7,7 @@ using SOA_CA2_E_Commerce.Helpers;
 using SOA_CA2_E_Commerce.Models;
 using SOA_CA2_E_Commerce.Enums;
 
+
 namespace SOA_CA2_E_Commerce.Services
 {
     public class AuthService
