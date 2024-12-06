@@ -88,7 +88,7 @@ namespace SOA_CA2_E_Commerce.Data
                 .HasOne(oi => oi.Product)
                 .WithMany()
                 .HasForeignKey(oi => oi.Product_Id)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // **Default Values**
             modelBuilder.Entity<User>()
