@@ -39,11 +39,12 @@ namespace SOA_CA2_E_Commerce.Controllers
         {
             try
             {
-                var (jwtToken, refreshToken) = await _authService.Login(loginDto);
+                var (jwtToken, refreshToken,apiKey) = await _authService.Login(loginDto);
                 return Ok(new
                 {
                     JwtToken = jwtToken,
-                    RefreshToken = refreshToken
+                    RefreshToken = refreshToken,
+                    ApiKey = apiKey
                 });
             }
             catch (UnauthorizedAccessException ex)
