@@ -33,18 +33,20 @@ namespace SOA_CA2_E_Commerce.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
             try
             {
-                var (jwtToken, refreshToken,apiKey) = await _authService.Login(loginDto);
+                // Updated to return User_Id in addition to JwtToken, RefreshToken, and ApiKey
+                var (jwtToken, refreshToken, apiKey, userId) = await _authService.Login(loginDto);
                 return Ok(new
                 {
                     JwtToken = jwtToken,
                     RefreshToken = refreshToken,
-                    ApiKey = apiKey
+                    ApiKey = apiKey,
+                    UserId = userId
                 });
             }
             catch (UnauthorizedAccessException ex)
@@ -52,6 +54,7 @@ namespace SOA_CA2_E_Commerce.Controllers
                 return Unauthorized(new { Message = ex.Message });
             }
         }
+
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] string oldRefreshToken)
