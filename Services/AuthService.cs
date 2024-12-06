@@ -59,7 +59,7 @@ namespace SOA_CA2_E_Commerce.Services
             return apiKey; // Return plaintext API key to the user
         }
 
-        public async Task<(string JwtToken, string RefreshToken, string ApiKey, int UserId)> Login(LoginDTO loginDto)
+        public async Task<(string JwtToken, string RefreshToken, string ApiKey, int UserId, UserRole? Role)> Login(LoginDTO loginDto)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == loginDto.Email);
             if (user == null || !PasswordHelper.VerifyPassword(loginDto.Password, user.PasswordHash, user.Salt))
@@ -86,8 +86,8 @@ namespace SOA_CA2_E_Commerce.Services
             user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(7); // Set refresh token expiration
             await _context.SaveChangesAsync();
 
-            // Return JWT token, refresh token, API key, and User_Id
-            return (jwtToken, refreshToken, user.ApiKey, user.User_Id);
+            // Return JWT token, refresh token, API key, User_Id, and Role
+            return (jwtToken, refreshToken, user.ApiKey, user.User_Id, user.Role);
         }
 
         public async Task<bool> ValidateApiKey(string apiKey)

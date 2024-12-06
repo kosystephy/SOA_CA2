@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SOA_CA2_E_Commerce.DTO;
+using SOA_CA2_E_Commerce.Enums;
 using SOA_CA2_E_Commerce.Helpers;
 using SOA_CA2_E_Commerce.Services;
 using System.Security.Claims;
@@ -40,13 +41,14 @@ namespace SOA_CA2_E_Commerce.Controllers
             try
             {
                 // Updated to return User_Id in addition to JwtToken, RefreshToken, and ApiKey
-                var (jwtToken, refreshToken, apiKey, userId) = await _authService.Login(loginDto);
+                var (jwtToken, refreshToken, apiKey, userId,role) = await _authService.Login(loginDto);
                 return Ok(new
                 {
                     JwtToken = jwtToken,
                     RefreshToken = refreshToken,
                     ApiKey = apiKey,
-                    UserId = userId
+                    UserId = userId,
+                    Role = role
                 });
             }
             catch (UnauthorizedAccessException ex)
