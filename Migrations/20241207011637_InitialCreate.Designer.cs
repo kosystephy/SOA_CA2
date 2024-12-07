@@ -12,7 +12,7 @@ using SOA_CA2_E_Commerce.Data;
 namespace SOA_CA2_E_Commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241205203636_InitialCreate")]
+    [Migration("20241207011637_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -243,7 +243,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.Property<int?>("Role")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -312,7 +312,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                     b.HasOne("SOA_CA2_E_Commerce.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("Product_Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");

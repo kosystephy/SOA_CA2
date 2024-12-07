@@ -46,7 +46,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Salt = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Role = table.Column<int>(type: "int", nullable: true, defaultValue: 1),
+                    Role = table.Column<int>(type: "int", nullable: true, defaultValue: 0),
                     Address = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ApiKey = table.Column<string>(type: "varchar(255)", nullable: false)
@@ -192,7 +192,7 @@ namespace SOA_CA2_E_Commerce.Migrations
                         column: x => x.Product_Id,
                         principalTable: "Products",
                         principalColumn: "Product_Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
