@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SOA_CA2_E_Commerce.DTO;
+using SOA_CA2_E_Commerce.Enums;
 using SOA_CA2_E_Commerce.Helpers;
 using SOA_CA2_E_Commerce.Services;
 using System.Security.Claims;
@@ -33,17 +34,21 @@ namespace SOA_CA2_E_Commerce.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
             try
             {
-                var (jwtToken, refreshToken) = await _authService.Login(loginDto);
+                // Updated to return User_Id in addition to JwtToken, RefreshToken, and ApiKey
+                var (jwtToken, refreshToken, apiKey, userId,role) = await _authService.Login(loginDto);
                 return Ok(new
                 {
                     JwtToken = jwtToken,
-                    RefreshToken = refreshToken
+                    RefreshToken = refreshToken,
+                    ApiKey = apiKey,
+                    UserId = userId,
+                    Role = role
                 });
             }
             catch (UnauthorizedAccessException ex)
@@ -51,6 +56,7 @@ namespace SOA_CA2_E_Commerce.Controllers
                 return Unauthorized(new { Message = ex.Message });
             }
         }
+
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] string oldRefreshToken)
