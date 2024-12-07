@@ -82,7 +82,7 @@ var allowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigi
 // Add CORS services
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", builder =>
+    options.AddPolicy("AllowedOrigins", builder =>
     {
         builder.WithOrigins(allowedOrigins)  // Apply the allowed origins
                .AllowAnyMethod()
@@ -114,7 +114,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ApiKeyMiddleware>();
 
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowedOrigins");
 
 
 app.UseHttpsRedirection();
@@ -122,8 +122,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-
 
 app.MapControllers();
 
