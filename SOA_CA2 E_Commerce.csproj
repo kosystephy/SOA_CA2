@@ -2,10 +2,15 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>SOA_CA2_E_Commerce</RootNamespace>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="web.config" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
@@ -30,6 +35,10 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
 		<PackageReference Include="xunit" Version="2.4.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="web.config" />
 	</ItemGroup>
 
 </Project>
