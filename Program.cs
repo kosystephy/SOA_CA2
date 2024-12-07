@@ -76,6 +76,21 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 
+// Fetch the allowed origins from the Configuration
+var allowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
+
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder.WithOrigins(allowedOrigins)  // Apply the allowed origins
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
+
 
 
 var app = builder.Build();
@@ -99,6 +114,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ApiKeyMiddleware>();
 
+app.UseCors("AllowAllOrigins");
 
 
 app.UseHttpsRedirection();
