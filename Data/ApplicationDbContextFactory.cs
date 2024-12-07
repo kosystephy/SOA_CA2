@@ -20,14 +20,11 @@ namespace SOA_CA2_E_Commerce.Data
             // Get the connection string
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // Configure EF Core to use SQL Server
-            optionsBuilder.UseSqlServer(connectionString,options =>
-              options.EnableRetryOnFailure(
-        maxRetryCount: 5,
-        maxRetryDelay: TimeSpan.FromSeconds(30),
-        errorNumbersToAdd: null));
+            // Configure EF Core to use MySQL
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
+
 }
