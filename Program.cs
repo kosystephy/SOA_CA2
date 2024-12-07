@@ -119,9 +119,11 @@ app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
-app.UseAuthentication();
+
 
 app.MapControllers();
 
