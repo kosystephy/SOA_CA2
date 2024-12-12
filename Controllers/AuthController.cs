@@ -40,7 +40,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         {
             try
             {
-                // Updated to return User_Id in addition to JwtToken, RefreshToken, and ApiKey
+               
                 var (jwtToken, refreshToken, apiKey, userId,role) = await _authService.Login(loginDto);
                 return Ok(new
                 {
@@ -91,7 +91,7 @@ namespace SOA_CA2_E_Commerce.Controllers
         {
             try
             {
-                // Get the current user's email from the JWT claims
+             
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
                 if (string.IsNullOrEmpty(userEmail))

@@ -19,7 +19,7 @@ namespace SOA_CA2_E_Commerce.Models
         public decimal Price { get; set; }
 
         [Required]
-        public decimal TotalPrice => Quantity * Price; // Computed Property
+        public decimal TotalPrice => Quantity * Price;
 
         public Order Order { get; set; }
 

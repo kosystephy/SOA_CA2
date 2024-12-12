@@ -3,7 +3,7 @@
     public class CartDTO
     {
         public int Cart_Id { get; set; }
-        public int User_Id { get; set; } // FK to User
+        public int User_Id { get; set; } 
         public DateTime CreatedAt { get; set; }
         public ICollection<CartItemDTO> Items { get; set; }
     }

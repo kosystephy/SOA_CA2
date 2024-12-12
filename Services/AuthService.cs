@@ -33,7 +33,7 @@ namespace SOA_CA2_E_Commerce.Services
             var salt = PasswordHelper.GenerateSalt();
             var passwordHash = PasswordHelper.HashPassword(registerDto.Password, salt);
 
-            // Generate plaintext API key
+      
             var apiKey = ApiKeyHelper.GenerateApiKey();
 
             var refreshToken = Guid.NewGuid().ToString();
@@ -47,7 +47,7 @@ namespace SOA_CA2_E_Commerce.Services
                 Salt = salt,
                 Address = registerDto.Address,
                 Role = registerDto.Role,
-                ApiKey = apiKey, // Store plaintext API key
+                ApiKey = apiKey, 
                 ApiKeyExpiration = DateTime.UtcNow.AddMonths(6),
                 RefreshToken = refreshToken,
                 RefreshTokenExpiration = DateTime.UtcNow.AddDays(7),
@@ -57,7 +57,7 @@ namespace SOA_CA2_E_Commerce.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return apiKey; // Return plaintext API key to the user
+            return apiKey; 
         }
 
         public async Task<(string JwtToken, string RefreshToken, string ApiKey, int UserId, UserRole? Role)> Login(LoginDTO loginDto)
@@ -73,7 +73,6 @@ namespace SOA_CA2_E_Commerce.Services
                 throw new InvalidOperationException("JWT secret key is missing in the configuration.");
             }
 
-            // Generate JWT token
             var jwtToken = JwtHelper.GenerateToken(
                 user.Email,
                 user.Role.ToString(),
@@ -81,13 +80,13 @@ namespace SOA_CA2_E_Commerce.Services
                 _jwtSecret
             );
 
-            // Generate a new refresh token
+          
             var refreshToken = Guid.NewGuid().ToString();
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(7); // Set refresh token expiration
+            user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(7); 
             await _context.SaveChangesAsync();
 
-            // Return JWT token, refresh token, API key, User_Id, and Role
+      
             return (jwtToken, refreshToken, user.ApiKey, user.User_Id, user.Role);
         }
 
@@ -112,7 +111,7 @@ namespace SOA_CA2_E_Commerce.Services
             var newRefreshToken = Guid.NewGuid().ToString();
 
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(7); // Extend refresh token expiration
+            user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(7); 
             await _context.SaveChangesAsync();
 
             return newJwtToken;
@@ -124,7 +123,7 @@ namespace SOA_CA2_E_Commerce.Services
             if (user == null)
                 throw new KeyNotFoundException("Invalid refresh token.");
 
-            user.RefreshToken = null; // Invalidate the refresh token
+            user.RefreshToken = null; 
             user.RefreshTokenExpiration = null;
             await _context.SaveChangesAsync();
         }
@@ -138,7 +137,7 @@ namespace SOA_CA2_E_Commerce.Services
                 throw new KeyNotFoundException("User not found.");
             }
 
-            return user.ApiKey; // Return plaintext API key
+            return user.ApiKey; 
         }
     }
 }

@@ -8,7 +8,7 @@
     public class CartItemUpdateDTO
     {
         public int Product_Id { get; set; }
-        public int Quantity { get; set; } // Set to 0 to remove the item
+        public int Quantity { get; set; } 
     }
 
 }

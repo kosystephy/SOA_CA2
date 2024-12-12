@@ -18,7 +18,7 @@ namespace SOA_CA2_E_Commerce.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // **Primary Keys and Auto-Increment**
+            // Logic to implement Primary Keys and Auto-Increment
             modelBuilder.Entity<User>().HasKey(u => u.User_Id);
             modelBuilder.Entity<User>().Property(u => u.User_Id).ValueGeneratedOnAdd();
 
@@ -47,7 +47,7 @@ namespace SOA_CA2_E_Commerce.Data
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Product>().HasIndex(p => new { p.Product_Name, p.Category_Id }).IsUnique();
 
-            // **Relationships**
+            // **Relationships mainly one to many between the tables
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
@@ -107,7 +107,7 @@ namespace SOA_CA2_E_Commerce.Data
                 .Property(u => u.RefreshTokenExpiration)
                 .IsRequired(false);
 
-            // **Enum-to-String Conversion**
+            //Enum-to-String Conversion for certain fields
             modelBuilder.Entity<Product>()
                 .Property(p => p.Gender)
                 .HasConversion<string>();
@@ -116,7 +116,7 @@ namespace SOA_CA2_E_Commerce.Data
                 .Property(o => o.Status)
                 .HasConversion<string>();
 
-            // **Optional Fields**
+            // list of Optional Fields
             modelBuilder.Entity<Product>()
                 .Property(p => p.ImageUrl)
                 .IsRequired(false);

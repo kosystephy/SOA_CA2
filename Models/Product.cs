@@ -28,14 +28,14 @@ namespace SOA_CA2_E_Commerce.Models
         public string Description { get; set; }
 
         [Required]
-        public GenderType Gender { get; set; } // Using the enum
+        public GenderType Gender { get; set; } 
 
         [Required]
         [Url(ErrorMessage = "Invalid URL format.")]
-        public string ImageUrl { get; set; } // Image link validation
+        public string ImageUrl { get; set; } 
 
 
-        // Navigation property
+    
         public Category Category { get; set; }
 
      

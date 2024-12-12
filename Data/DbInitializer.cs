@@ -9,10 +9,10 @@ namespace SOA_CA2_E_Commerce.Data
     {
         public static void Seed(ApplicationDbContext context)
         {
-            // Ensure database creation
+           
             context.Database.EnsureCreated();
 
-            // Seed Users
+            // Seeding Users
             if (!context.Users.Any())
             {
                 var saltAdmin = PasswordHelper.GenerateSalt();
@@ -77,7 +77,7 @@ namespace SOA_CA2_E_Commerce.Data
                 context.SaveChanges();
             }
 
-            // Seed Categories
+            // Seeding Categories
             if (!context.Categories.Any())
             {
                 context.Categories.AddRange(
@@ -88,7 +88,7 @@ namespace SOA_CA2_E_Commerce.Data
                 context.SaveChanges();
             }
 
-            // Seed Products
+            // Seeding Products
             if (!context.Products.Any())
             {
                 var clothingCategory = context.Categories.First(c => c.CategoryName == "Clothing");
@@ -128,7 +128,7 @@ namespace SOA_CA2_E_Commerce.Data
                 context.SaveChanges();
             }
 
-            // Seed Carts
+            // Seeding Carts
             if (!context.Carts.Any())
             {
                 var userJohn = context.Users.First(u => u.Email == "john.doe@example.com");
@@ -142,7 +142,7 @@ namespace SOA_CA2_E_Commerce.Data
                 context.SaveChanges();
             }
 
-            // Seed Cart Items
+            // Seeding Cart Items
             if (!context.CartItems.Any())
             {
                 var cart = context.Carts.First();
@@ -159,7 +159,7 @@ namespace SOA_CA2_E_Commerce.Data
                 context.SaveChanges();
             }
 
-            // Seed Orders
+            // Seeding Orders
             if (!context.Orders.Any())
             {
                 var userJane = context.Users.First(u => u.Email == "jane.smith@example.com");
